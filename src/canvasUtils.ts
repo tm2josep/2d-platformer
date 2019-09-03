@@ -1,6 +1,5 @@
-import { jsonTile, Vector2D } from './types';
+import { jsonTile } from './types';
 import TileSet from './TileSet';
-import Sprite from './Sprite';
 
 export function makeBuffer(image: HTMLImageElement | HTMLCanvasElement, w: number, h: number, fit: boolean): HTMLCanvasElement {
     const buffer = document.createElement('canvas');
@@ -23,13 +22,6 @@ export function makeFixedLayer(image: HTMLImageElement | HTMLCanvasElement, w: n
         )
     }
 }
-
-export function createSpriteLayer(sprite: Sprite, pos: Vector2D) {
-    return (context: CanvasRenderingContext2D) => {
-        sprite.draw(context, pos.x, pos.y);
-    }
-}
-
 
 export function drawTilesFromJson(
     context: CanvasRenderingContext2D,
