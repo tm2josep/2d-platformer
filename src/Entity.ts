@@ -1,4 +1,4 @@
-import Vec2 from './MathTools';
+import { Vec2 } from './MathTools';
 import Sprite from './Sprite';
 import Trait from './Traits/Trait';
 
@@ -12,6 +12,7 @@ export default class Entity {
     }
 
     update(delta: number) {
+        this.sprite.update(delta);
         this.traits.forEach(trait => {
             trait.update(this, delta);
         })
