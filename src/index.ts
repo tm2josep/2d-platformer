@@ -6,6 +6,7 @@ import Entity from './Entity';
 import Timer from './Timer';
 import Keyboard from './KeyboardState';
 import Velocity from './Traits/Velocity';
+import Jump from './Traits/Jump';
 
 import { GRAVITY } from './constants';
 
@@ -27,19 +28,23 @@ Promise.all([
 
     player.pos.set(50, 600);
     keyboard.attach(window);
-    keyboard.addMapping(SPACE, () => {
-        console.log('jump');
+    keyboard.addMapping(SPACE, (state: boolean) => {
+        if (state) {
+            player.trait('jump').start();
+        } else {
+            player.trait('jump').cancel();
+        }
     })
 
     player.addTrait(new Velocity());
     player.trait('velocity').vec.set(0, 0);
+    player.addTrait(new Jump(keyboard));
 
     level.comp.addLayers((context: CanvasRenderingContext2D) => player.draw(context));
 
     const timer = new Timer(1 / 60, (delta: number) => {
         player.update(delta);
-        let playerVel: Velocity = player.trait('velocity');
-        // playerVel.vec.y += GRAVITY * delta;
+        player.trait('velocity').vec.y += GRAVITY * delta;
         level.comp.draw(context);
     });
 

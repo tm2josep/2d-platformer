@@ -1,5 +1,5 @@
 export default class KeyboardState {
-    private keyStates: Map<number, boolean>;
+    public readonly keyStates: Map<number, boolean>;
     private keyMap: Map<number, Function>;
 
     constructor() {
@@ -26,8 +26,7 @@ export default class KeyboardState {
         }
 
         this.keyStates.set(code, keyState);
-        console.log(this.keyStates);
-        this.keyMap.get(code)(event);
+        this.keyMap.get(code)(keyState);
     }
 
     attach(el: any) {

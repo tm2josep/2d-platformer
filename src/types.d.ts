@@ -1,4 +1,9 @@
 export interface jsonTile {
     tile: string,
-    ranges: Array<Array<number>>
+    ranges: number[][]
+}
+
+export interface tileData {
+    type: string,
+    collidable: boolean
 }

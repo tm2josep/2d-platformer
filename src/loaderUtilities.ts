@@ -1,7 +1,14 @@
 import { jsonTile } from './types';
 import TileSet from './TileSet';
+import { WIDTH, HEIGHT } from './constants';
+import { Matrix } from './MathTools';
 
-export function makeBuffer(image: HTMLImageElement | HTMLCanvasElement, w: number, h: number, fit: boolean): HTMLCanvasElement {
+export function makeBuffer(
+    image: HTMLImageElement | HTMLCanvasElement,
+    w: number,
+    h: number,
+    fit: boolean
+): HTMLCanvasElement {
     const buffer = document.createElement('canvas');
     buffer.width = w;
     buffer.height = h;
@@ -13,7 +20,7 @@ export function makeBuffer(image: HTMLImageElement | HTMLCanvasElement, w: numbe
     return buffer;
 }
 
-export function makeFixedLayer(image: HTMLImageElement | HTMLCanvasElement, w: number, h: number, fit: boolean): Function {
+export function makeFixedLayer(image: HTMLImageElement | HTMLCanvasElement): Function {
     const buffer = makeBuffer(image, image.width, image.height, true);
     return (context: CanvasRenderingContext2D) => {
         context.drawImage(
@@ -23,18 +30,27 @@ export function makeFixedLayer(image: HTMLImageElement | HTMLCanvasElement, w: n
     }
 }
 
-export function drawTilesFromJson(
-    context: CanvasRenderingContext2D,
+export function loadTilesFromJson(
     tiles: TileSet,
+    matrix: Matrix,
     set: Array<jsonTile>
-): void {
+): Function {
+    const buffer = document.createElement('canvas');
+    buffer.width = WIDTH;
+    buffer.height = HEIGHT;
+
+    const context = buffer.getContext('2d');
+
     set.forEach(({ tile, ranges }: jsonTile) => {
         ranges.forEach(([xstart, xend, ystart, yend]) => {
             for (let i = xstart; i < xend; ++i) {
                 for (let j = ystart; j < yend; ++j) {
                     tiles.draw(tile, context, i, j);
+                    matrix.set(i, j, {type: tile, collidable: true})
                 }
             }
         })
     });
+
+    return makeFixedLayer(buffer);
 }

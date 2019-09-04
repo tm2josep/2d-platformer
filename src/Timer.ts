@@ -8,7 +8,7 @@ export default class Timer {
     ) {}
 
     updateHandler(time = 0) {
-        if (time > 5000) {return;}
+        if (time > 5000) {return;} //TODO: REMOVE WHEN TIME TO RUN IN PROD
         this.accumulatedTime += (time - this.lastTime) / 1000;
 
         while (this.accumulatedTime > this.deltaTime) {

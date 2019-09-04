@@ -1,7 +1,9 @@
 import Level from './Level';
 import { TILESIZE, WIDTH, HEIGHT } from './constants';
-import { drawTilesFromJson, makeFixedLayer } from './canvasUtils';
+import { makeFixedLayer, loadTilesFromJson } from './loaderUtilities';
 import TileSet from './TileSet';
+import { jsonTile } from './types';
+import { Matrix } from './MathTools';
 
 export function loadImage(url: string): Promise<HTMLImageElement> {
     return new Promise((resolve, reject) => {
@@ -30,15 +32,12 @@ export function loadLevel(lvl: string): Promise<Level> {
         }
     }).then(({ data: levelData, bg: background }) => {
         const level = new Level();
-        
-        const ground = document.createElement('canvas');
-        ground.width = WIDTH;
-        ground.height = HEIGHT;
-        drawTilesFromJson(ground.getContext('2d'), terrain, levelData.terrain);
+
+        const terrainLayer = loadTilesFromJson(terrain, level.matrix, levelData.terrain);
 
         level.comp.addLayers(
-            makeFixedLayer(background, WIDTH, HEIGHT, true),
-            makeFixedLayer(ground, WIDTH, HEIGHT, true)
+            makeFixedLayer(background),
+            terrainLayer
         );
 
         return level;
