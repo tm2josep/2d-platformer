@@ -16,7 +16,6 @@ export class Vec2 {
 
 export class Matrix {
     private grid: tileData[][];
-    private readonly air = { type: 'air', collidable: false }
     constructor() {
         this.grid = [];
 
@@ -24,11 +23,11 @@ export class Matrix {
 
     get(x: number, y: number): tileData {
         if (!this.grid[x]) {
-            return this.air;
+            return;
         }
 
         if (!this.grid[x][y]) {
-            return this.air;
+            return;
         }
 
         return this.grid[x][y];

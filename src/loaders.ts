@@ -1,5 +1,5 @@
 import Level from './Level';
-import { TILESIZE, WIDTH, HEIGHT } from './constants';
+import { TILE_SIZE, WIDTH, HEIGHT } from './constants';
 import { makeFixedLayer, loadTilesFromJson } from './loaderUtilities';
 import TileSet from './TileSet';
 import { jsonTile } from './types';
@@ -19,7 +19,7 @@ export function loadImage(url: string): Promise<HTMLImageElement> {
 }
 
 export function loadLevel(lvl: string): Promise<Level> {
-    let terrain = new TileSet(TILESIZE);
+    let terrain = new TileSet(TILE_SIZE);
     return Promise.all([
         fetch(`./Levels/${lvl}.json`),
         loadImage('./assets/BG/BG.png'),

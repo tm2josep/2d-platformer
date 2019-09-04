@@ -6,7 +6,10 @@ export default class Entity {
     public pos: Vec2;
     private traits: Map<string, any>;
 
-    constructor(private sprite: Sprite) {
+    constructor(
+        private sprite: Sprite,
+        public size: Vec2
+    ) {
         this.pos = new Vec2(0, 0);
         this.traits = new Map();
     }
@@ -24,10 +27,7 @@ export default class Entity {
 
     trait(traitName: string) {
         if (!this.traits.has(traitName)) {
-            console.log(
-                `${traitName} trait does not exist on:`,
-                this
-            );
+            throw 'this trait doesn\'t exist'
         }
         return this.traits.get(traitName);
     }

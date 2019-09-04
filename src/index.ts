@@ -9,6 +9,8 @@ import Velocity from './Traits/Velocity';
 import Jump from './Traits/Jump';
 
 import { GRAVITY } from './constants';
+import { createCollisionLayer } from './loaderUtilities';
+import { Vec2 } from './MathTools';
 
 // Document Setup
 const canvas = <HTMLCanvasElement>document.getElementById('screen');
@@ -22,8 +24,12 @@ Promise.all([
     loadLevel('1-1'),
     loadAnimation('idle-2', 4)
 ]).then(([level, spriteFrames]) => {
+
+    level.comp.addLayers(createCollisionLayer(level));
+
     let player = new Entity(
-        new Sprite('idle', spriteFrames)
+        new Sprite('idle', spriteFrames),
+        new Vec2(25, 30)
     );
 
     player.pos.set(50, 600);
@@ -36,15 +42,18 @@ Promise.all([
         }
     })
 
-    player.addTrait(new Velocity());
-    player.trait('velocity').vec.set(0, 0);
     player.addTrait(new Jump(keyboard));
 
     level.comp.addLayers((context: CanvasRenderingContext2D) => player.draw(context));
+    level.addEntity(player);
+
+    player.addTrait(new Velocity());
+    player.trait('velocity').vec.set(0, 0);
+
 
     const timer = new Timer(1 / 60, (delta: number) => {
-        player.update(delta);
         player.trait('velocity').vec.y += GRAVITY * delta;
+        level.update(delta);
         level.comp.draw(context);
     });
 

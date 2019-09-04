@@ -5,5 +5,5 @@ export interface jsonTile {
 
 export interface tileData {
     type: string,
-    collidable: boolean
+    collides: boolean
 }

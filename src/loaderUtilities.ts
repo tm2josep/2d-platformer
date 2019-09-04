@@ -1,7 +1,8 @@
 import { jsonTile } from './types';
 import TileSet from './TileSet';
-import { WIDTH, HEIGHT } from './constants';
+import { WIDTH, HEIGHT, TILE_SIZE } from './constants';
 import { Matrix } from './MathTools';
+import Level from './Level';
 
 export function makeBuffer(
     image: HTMLImageElement | HTMLCanvasElement,
@@ -30,6 +31,33 @@ export function makeFixedLayer(image: HTMLImageElement | HTMLCanvasElement): Fun
     }
 }
 
+export function createCollisionLayer(level: Level): Function {
+    const resolvedTiles: Array<{ x: number, y: number }> = [];
+
+    const tileResolver = level.collider.tiles;
+
+    const getIndexByOriginal = tileResolver.getByIndex;
+    tileResolver.getByIndex = function (pos) {
+        resolvedTiles.push(pos);
+        return getIndexByOriginal.call(tileResolver, pos);
+    }
+
+    return (context: CanvasRenderingContext2D) => {
+        resolvedTiles.forEach(({ x, y }) => {
+            context.strokeStyle = 'blue';
+            context.strokeRect(x * TILE_SIZE, y * TILE_SIZE, TILE_SIZE, TILE_SIZE);
+        });
+
+        level.entities.forEach(entity => {
+            context.strokeStyle = 'red';
+            context.strokeRect(entity.pos.x, entity.pos.y, entity.size.x, entity.size.y);
+        })
+
+        resolvedTiles.length = 0;
+    }
+
+}
+
 export function loadTilesFromJson(
     tiles: TileSet,
     matrix: Matrix,
@@ -46,7 +74,7 @@ export function loadTilesFromJson(
             for (let i = xstart; i < xend; ++i) {
                 for (let j = ystart; j < yend; ++j) {
                     tiles.draw(tile, context, i, j);
-                    matrix.set(i, j, {type: tile, collidable: true})
+                    matrix.set(i, j, { type: tile, collides: true })
                 }
             }
         })
