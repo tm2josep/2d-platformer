@@ -21,8 +21,16 @@ export default class Entity {
         })
     }
 
+    addAnimation(name: string, images: HTMLImageElement[], loop: boolean) {
+        this.sprite.defineAnimation(name, images, loop)
+    }
+
     addTrait(trait: Trait) {
         this.traits.set(trait.NAME, trait);
+    }
+
+    setAnim(name: string) {
+        this.sprite.state = name;
     }
 
     trait(traitName: string) {

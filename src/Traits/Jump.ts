@@ -24,8 +24,11 @@ export default class Jump extends Trait {
 
     update(entity: Entity, delta: number) {
         if (this.engageTime > 0) {
+            entity.setAnim('jump');
             entity.trait('velocity').vec.y = -this.power;
             this.engageTime -= delta;
+        } else {
+            entity.setAnim('falling');
         }
     }
 

@@ -44,14 +44,6 @@ export function loadLevel(lvl: string): Promise<Level> {
     });
 }
 
-export function loadAnimation(animation: string, frameCount: number) {
-    const template = (anim: string, frame: number) =>
-        `./assets/Sprites/plain/frames/adventurer-${anim}-0${frame}.png`;
-
-    let load = [];
-    for (let i = 0; i < frameCount - 1; i++) {
-        load.push(template(animation, i));
-    }
-
-    return Promise.all(load.map(loadImage));
+export function loadImages(...fileUrls: string[]) {
+    return Promise.all(fileUrls.map(loadImage))
 }
