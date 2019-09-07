@@ -1,19 +1,19 @@
 export default class KeyboardState {
-    public readonly keyStates: Map<number, boolean>;
-    private keyMap: Map<number, Function>;
+    public readonly keyStates: Map<string, boolean>;
+    private keyMap: Map<string, Function>;
 
     constructor() {
         this.keyStates = new Map();
         this.keyMap = new Map();
     }
 
-    addMapping(keycode: number, cb: Function) {
+    addMapping(keycode: string, cb: Function) {
         this.keyMap.set(keycode, cb);
     }
 
     private handle(event: KeyboardEvent): void {
         event.preventDefault();
-        const { keyCode: code } = event;
+        const { code } = event;
 
         if (!this.keyMap.has(code)) {
             return;
