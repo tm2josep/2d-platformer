@@ -1,8 +1,8 @@
-import { jsonTile } from './types';
-import TileSet from './TileSet';
-import { WIDTH, HEIGHT, TILE_SIZE } from './constants';
-import { Matrix } from './MathTools';
-import Level from './Level';
+import { jsonTile } from '../types';
+import TileSet from '../TileSet';
+import { WIDTH, HEIGHT, TILE_SIZE } from '../constants';
+import { Matrix } from '../MathTools';
+import Level from '../Level';
 
 export function makeBuffer(
     image: HTMLImageElement | HTMLCanvasElement,

@@ -32,8 +32,12 @@ export class Resolver {
         if (tile) {
             const y1 = pos.y * TILE_SIZE;
             const y2 = y1 + TILE_SIZE;
+            const x1 = pos.x * TILE_SIZE;
+            const x2 = x1 + TILE_SIZE;
             return {
                 tile,
+                x1, 
+                x2,
                 y1,
                 y2
             }

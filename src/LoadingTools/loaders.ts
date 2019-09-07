@@ -1,15 +1,19 @@
-import Level from './Level';
-import { TILE_SIZE, WIDTH, HEIGHT } from './constants';
+import Level from '../Level';
+import { TILE_SIZE } from '../constants';
 import { makeFixedLayer, loadTilesFromJson } from './loaderUtilities';
-import TileSet from './TileSet';
-import { jsonTile } from './types';
-import { Matrix } from './MathTools';
+import TileSet from '../TileSet';
 
-export function loadImage(url: string): Promise<HTMLImageElement> {
+export function loadImage(url: string): Promise<HTMLCanvasElement> {
     return new Promise((resolve, reject) => {
         const image = new Image();
         image.onload = () => {
-            resolve(image);
+
+            const buffer = document.createElement('canvas');
+            buffer.width = image.naturalWidth;
+            buffer.height = image.naturalHeight;
+            buffer.getContext('2d').drawImage(image, 0, 0);
+
+            resolve(buffer);
         }
         image.src = url;
         image.onerror = () => {
@@ -42,8 +46,4 @@ export function loadLevel(lvl: string): Promise<Level> {
 
         return level;
     });
-}
-
-export function loadImages(...fileUrls: string[]) {
-    return Promise.all(fileUrls.map(loadImage))
 }

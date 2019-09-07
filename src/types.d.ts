@@ -9,6 +9,6 @@ export interface tileData {
 }
 
 export interface animation {
-    images: Array<HTMLImageElement>,
+    images: Array<HTMLImageElement | HTMLCanvasElement>,
     loop: boolean
 }

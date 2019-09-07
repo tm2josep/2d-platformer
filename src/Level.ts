@@ -23,7 +23,10 @@ export default class Level {
     update(delta: number) {
         this.entities.forEach(entity => {
             entity.update(delta);
-            this.collider.test(entity);
+            entity.pos.x += entity.vel.x * delta;
+            this.collider.checkX(entity);
+            entity.pos.y += entity.vel.y * delta;
+            this.collider.checkY(entity);
         });
     }
 }

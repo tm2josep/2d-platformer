@@ -20,7 +20,7 @@ export class TileCollider {
             y: entity.pos.y + entity.size.y
         };
         const matches = this.tiles.searchByRange(
-            Object.assign(entity.pos, {}),
+            entity.pos,
             pos2
         );
 
@@ -29,17 +29,48 @@ export class TileCollider {
                 return;
             }
 
-            if (entity.trait('velocity').vec.y > 0) {
+            if (entity.vel.y > 0) {
                 if (entity.pos.y + entity.size.y > match.y1) {
                     entity.pos.y = match.y1 - entity.size.y;
-                    entity.trait('velocity').vec.y = 0;
+                    entity.vel.y = 0;
                 }
             }
 
-            if (entity.trait('velocity').vec.y < 0) {
+            if (entity.vel.y < 0) {
                 if (entity.pos.y < match.y2) {
                     entity.pos.y = match.y2;
-                    entity.trait('velocity').vec.y = 0;
+                    entity.vel.y = 0;
+                }
+            }
+        });
+    }
+
+    checkX(entity: Entity) {
+        const pos2 = {
+            x: entity.pos.x + entity.size.x,
+            y: entity.pos.y + entity.size.y
+        };
+        const matches = this.tiles.searchByRange(
+            entity.pos,
+            pos2
+        );
+
+        matches.forEach(match => {
+            if (!match.tile.collides) {
+                return;
+            }
+
+            if (entity.vel.x > 0) {
+                if (entity.pos.x + entity.size.x > match.x1) {
+                    entity.pos.x = match.x1 - entity.size.x;
+                    entity.vel.x = 0;
+                }
+            }
+
+            if (entity.vel.x < 0) {
+                if (entity.pos.x < match.x2) {
+                    entity.pos.x = match.x2;
+                    entity.vel.x = 0;
                 }
             }
         });

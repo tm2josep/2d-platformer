@@ -3,16 +3,14 @@ import Sprite from './Sprite';
 import Trait from './Traits/Trait';
 
 export default class Entity {
-    public pos: Vec2;
-    private traits: Map<string, any>;
+    public pos = new Vec2(0, 0);
+    public vel = new Vec2(0, 0);
+    private traits: Map<string, any> = new Map();
 
     constructor(
         private sprite: Sprite,
         public size: Vec2
-    ) {
-        this.pos = new Vec2(0, 0);
-        this.traits = new Map();
-    }
+    ) {}
 
     update(delta: number) {
         this.sprite.update(delta);
@@ -21,7 +19,7 @@ export default class Entity {
         })
     }
 
-    addAnimation(name: string, images: HTMLImageElement[], loop: boolean) {
+    addAnimation(name: string, images: HTMLCanvasElement[], loop: boolean) {
         this.sprite.defineAnimation(name, images, loop)
     }
 
@@ -30,7 +28,7 @@ export default class Entity {
     }
 
     setAnim(name: string) {
-        this.sprite.state = name;
+        // this.sprite.state = name;
     }
 
     trait(traitName: string) {

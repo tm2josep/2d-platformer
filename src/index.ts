@@ -1,43 +1,34 @@
 // imports
-import { loadLevel, loadImages } from './loaders';
+import { loadLevel } from './LoadingTools/loaders';
 
 import Sprite from './Sprite';
 import Entity from './Entity';
 import Timer from './Timer';
-import Keyboard from './KeyboardState';
-import Velocity from './Traits/Velocity';
 import Jump from './Traits/Jump';
 
-import { GRAVITY } from './constants';
-import { createCollisionLayer } from './loaderUtilities';
+import { GRAVITY, RIGHT, LEFT, UP } from './constants';
+import { createCollisionLayer } from './LoadingTools/loaderUtilities';
 import { Vec2 } from './MathTools';
+import Go from './Traits/Go';
+import { SpriteLoader } from './LoadingTools/SpriteLoader';
+import { setupKeyboard } from './Input/inputSetup';
 
 // Document Setup
 const canvas = <HTMLCanvasElement>document.getElementById('screen');
 const context = canvas.getContext('2d');
 
 // Logic
-const keyboard = new Keyboard();
-const SPACE = 32;
+const spriteSheet = new SpriteLoader('./assets/Sprites/plain/adventurer-v1.5-Sheet.png');
 
 Promise.all([
     loadLevel('1-1'),
-    loadImages(
-        './assets/Sprites/plain/frames/adventurer-idle-2-00.png',
-        './assets/Sprites/plain/frames/adventurer-idle-2-01.png',
-        './assets/Sprites/plain/frames/adventurer-idle-2-02.png'
-    ),
-    loadImages(
-        './assets/Sprites/plain/frames/adventurer-jump-00.png',
-        './assets/Sprites/plain/frames/adventurer-jump-01.png',
-        './assets/Sprites/plain/frames/adventurer-jump-02.png'
-    ),
-    loadImages(
-        './assets/Sprites/plain/frames/adventurer-fall-00.png',
-        './assets/Sprites/plain/frames/adventurer-fall-01.png'
-        
-    )
-]).then(([level, idleFrames, startJumpFrames, fallingFrames]) => {
+    spriteSheet.getFrames([
+        {x: 0, y: 7, w: 50, h: 37},
+        {x: 50, y: 7, w: 50, h: 37},
+        {x: 100, y: 7, w: 50, h: 37},
+        {x: 150, y: 7, w: 50, h: 37},    
+    ])
+]).then(([level, idleFrames]) => {
 
     level.comp.addLayers(createCollisionLayer(level));
 
@@ -47,29 +38,16 @@ Promise.all([
     );
 
     player.pos.set(50, 600);
-    keyboard.attach(window);
-    keyboard.addMapping(SPACE, (state: boolean) => {
-        if (state) {
-            player.trait('jump').start();
-        } else {
-            player.trait('jump').cancel();            
-        }
-    });
+    setupKeyboard(player);
 
-    player.addTrait(new Jump(keyboard));
-
-    player.addAnimation('jump', startJumpFrames, false);
-    player.addAnimation('falling', fallingFrames, true);
+    player.addTrait(new Jump());
+    player.addTrait(new Go());
 
     level.comp.addLayers((context: CanvasRenderingContext2D) => player.draw(context));
     level.addEntity(player);
 
-    player.addTrait(new Velocity());
-    player.trait('velocity').vec.set(0, 0);
-
-
     const timer = new Timer(1 / 60, (delta: number) => {
-        player.trait('velocity').vec.y += GRAVITY * delta;
+        player.vel.y += GRAVITY * delta;
         level.update(delta);
         level.comp.draw(context);
     });

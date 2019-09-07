@@ -1,4 +1,4 @@
-import { loadImage } from './loaders';
+import { loadImage } from './LoadingTools/loaders';
 export default class TileSet {
     private tiles: Map<string, HTMLCanvasElement>;
     constructor(public readonly tileSize: number) {
