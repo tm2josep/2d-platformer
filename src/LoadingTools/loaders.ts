@@ -1,7 +1,7 @@
 import Level from '../Level';
 import { TILE_SIZE } from '../constants';
 import { makeFixedLayer, loadTilesFromJson } from './loaderUtilities';
-import TileSet from '../TileSet';
+import TileSet from './TileSet';
 
 export function loadImage(url: string): Promise<HTMLCanvasElement> {
     return new Promise((resolve, reject) => {
@@ -27,8 +27,8 @@ export function loadLevel(lvl: string): Promise<Level> {
     return Promise.all([
         fetch(`./Levels/${lvl}.json`),
         loadImage('./assets/BG/BG.png'),
-        terrain.define('flat', './assets/Tiles/2.png'),
-        terrain.define('earth', './assets/Tiles/5.png')
+        terrain.define('flat', 'assets/jg_assets/Solid blocks/Grass/Grass.png', [0, 0, 16, 16]),
+        terrain.define('earth', './assets/jg_assets/Solid blocks/Dirt/Dirt.png', [0, 0, 16, 16])
     ]).then(async ([r, background]) => {
         return {
             data: await r.json(),

@@ -1,5 +1,5 @@
 import { jsonTile } from '../types';
-import TileSet from '../TileSet';
+import TileSet from './TileSet';
 import { WIDTH, HEIGHT, TILE_SIZE } from '../constants';
 import { Matrix } from '../MathTools';
 import Level from '../Level';
@@ -70,9 +70,9 @@ export function loadTilesFromJson(
     const context = buffer.getContext('2d');
 
     set.forEach(({ tile, ranges }: jsonTile) => {
-        ranges.forEach(([xstart, xend, ystart, yend]) => {
-            for (let i = xstart; i < xend; ++i) {
-                for (let j = ystart; j < yend; ++j) {
+        ranges.forEach(([x0, x1, y0, y1]) => {
+            for (let i = x0; i < x1; ++i) {
+                for (let j = y0; j < y1; ++j) {
                     tiles.draw(tile, context, i, j);
                     matrix.set(i, j, { type: tile, collides: true })
                 }
