@@ -1,6 +1,7 @@
 import { Vec2 } from './MathTools';
 import Sprite from './Sprite';
 import Trait from './Traits/Trait';
+import Camera from './Camera/Camera';
 
 export default class Entity {
     public pos = new Vec2(0, 0);
@@ -38,7 +39,7 @@ export default class Entity {
         return this.traits.get(traitName);
     }
 
-    draw(context: CanvasRenderingContext2D) {
-        this.sprite.draw(context, this.pos.x, this.pos.y);
+    draw(context: CanvasRenderingContext2D, camera: Camera) {
+        this.sprite.draw(context, this.pos.x - camera.pos.x, this.pos.y - camera.pos.y);
     }
 }

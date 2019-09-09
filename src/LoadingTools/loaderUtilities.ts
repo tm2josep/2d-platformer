@@ -2,6 +2,7 @@ import { jsonTile } from '../types';
 import TileSet from './TileSet';
 import { WIDTH, HEIGHT, TILE_SIZE } from '../constants';
 import { Matrix } from '../MathTools';
+import Camera from '../Camera/Camera';
 import Level from '../Level';
 
 export function makeBuffer(
@@ -23,62 +24,26 @@ export function makeBuffer(
 
 export function makeFixedLayer(image: HTMLImageElement | HTMLCanvasElement): Function {
     const buffer = makeBuffer(image, image.width, image.height, true);
-    return (context: CanvasRenderingContext2D) => {
+    return (context: CanvasRenderingContext2D, camera: Camera) => {
         context.drawImage(
             buffer,
-            0, 0
+            -camera.pos.x, -camera.pos.y
         )
     }
 }
 
-export function createCollisionLayer(level: Level): Function {
-    const resolvedTiles: Array<{ x: number, y: number }> = [];
-
-    const tileResolver = level.collider.tiles;
-
-    const getIndexByOriginal = tileResolver.getByIndex;
-    tileResolver.getByIndex = function (pos) {
-        resolvedTiles.push(pos);
-        return getIndexByOriginal.call(tileResolver, pos);
-    }
-
-    return (context: CanvasRenderingContext2D) => {
-        resolvedTiles.forEach(({ x, y }) => {
-            context.strokeStyle = 'blue';
-            context.strokeRect(x * TILE_SIZE, y * TILE_SIZE, TILE_SIZE, TILE_SIZE);
-        });
-
-        level.entities.forEach(entity => {
-            context.strokeStyle = 'red';
-            context.strokeRect(entity.pos.x, entity.pos.y, entity.size.x, entity.size.y);
-        })
-
-        resolvedTiles.length = 0;
-    }
-
-}
-
-export function loadTilesFromJson(
+export function setTilesInMatrix(
     tiles: TileSet,
     matrix: Matrix,
     set: Array<jsonTile>
-): Function {
-    const buffer = document.createElement('canvas');
-    buffer.width = WIDTH;
-    buffer.height = HEIGHT;
-
-    const context = buffer.getContext('2d');
-
+) {
     set.forEach(({ tile, ranges }: jsonTile) => {
         ranges.forEach(([x0, x1, y0, y1]) => {
             for (let i = x0; i < x1; ++i) {
                 for (let j = y0; j < y1; ++j) {
-                    tiles.draw(tile, context, i, j);
-                    matrix.set(i, j, { type: tile, collides: true })
+                    matrix.set(i, j, { type: tile, collides: tiles.doesCollide(tile) })
                 }
             }
         })
     });
-
-    return makeFixedLayer(buffer);
 }

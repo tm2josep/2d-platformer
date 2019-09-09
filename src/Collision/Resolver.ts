@@ -1,6 +1,5 @@
 import { TILE_SIZE } from '../constants';
 import { Matrix } from '../MathTools';
-import { tileData } from '../types';
 
 export class Resolver {
     constructor(private matrix: Matrix) { }

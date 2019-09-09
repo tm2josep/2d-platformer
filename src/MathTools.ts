@@ -21,12 +21,24 @@ export class Matrix {
 
     }
 
+    checkCol(x: number): boolean {
+        return this.grid[x] !== undefined;
+    }
+
+    checkCell(x: number, y: number): boolean {
+        return this.grid[x][y] !== undefined;
+    }
+
+    getCol(x: number) {
+        return this.grid[x];
+    }
+
     get(x: number, y: number): tileData {
-        if (!this.grid[x]) {
+        if (!this.checkCol(x)) {
             return;
         }
 
-        if (!this.grid[x][y]) {
+        if (!this.checkCell(x, y)) {
             return;
         }
 

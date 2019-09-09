@@ -1,0 +1,22 @@
+{
+    "flat": {
+        "url": "assets/jg_assets/Solid blocks/Grass/Grass.png",
+        "collides": true,
+        "subset": [
+            0,
+            0,
+            16,
+            16
+        ]
+    },
+    "earth": {
+        "url": "assets/jg_assets/Solid blocks/Dirt/Dirt.png",
+        "collides": true,
+        "subset": [
+            0,
+            0,
+            16,
+            16
+        ]
+    }
+}

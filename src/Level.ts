@@ -2,6 +2,7 @@ import Compositor from './Compositor';
 import Entity from './Entity';
 import { Matrix } from './MathTools';
 import { TileCollider } from './Collision/TileCollider';
+import TileSet from './LoadingTools/TileSet';
 
 export default class Level {
     public comp: Compositor;
@@ -9,7 +10,7 @@ export default class Level {
     public matrix: Matrix;
     public collider: TileCollider;
 
-    constructor() {
+    constructor(public tileSet: TileSet) {
         this.comp = new Compositor();
         this.entities = new Set();
         this.matrix = new Matrix();

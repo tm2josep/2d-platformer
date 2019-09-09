@@ -10,10 +10,6 @@ export class TileCollider {
         this.tiles = new Resolver(matrix);
     }
 
-    test(entity: Entity) {
-        this.checkY(entity);
-    }
-
     checkY(entity: Entity) {
         const pos2 = {
             x: entity.pos.x + entity.size.x,

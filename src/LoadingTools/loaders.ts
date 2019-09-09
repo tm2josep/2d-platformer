@@ -1,7 +1,8 @@
 import Level from '../Level';
 import { TILE_SIZE } from '../constants';
-import { makeFixedLayer, loadTilesFromJson } from './loaderUtilities';
+import { makeFixedLayer, setTilesInMatrix } from './loaderUtilities';
 import TileSet from './TileSet';
+import { TileLayer } from './TileLayer';
 
 export function loadImage(url: string): Promise<HTMLCanvasElement> {
     return new Promise((resolve, reject) => {
@@ -22,28 +23,22 @@ export function loadImage(url: string): Promise<HTMLCanvasElement> {
     });
 }
 
+function loadJson(url: string) {
+    return fetch(url).then(r => r.json());
+}
+
 export function loadLevel(lvl: string): Promise<Level> {
     let terrain = new TileSet(TILE_SIZE);
     return Promise.all([
-        fetch(`./Levels/${lvl}.json`),
-        loadImage('./assets/BG/BG.png'),
-        terrain.define('flat', 'assets/jg_assets/Solid blocks/Grass/Grass.png', [0, 0, 16, 16]),
-        terrain.define('earth', './assets/jg_assets/Solid blocks/Dirt/Dirt.png', [0, 0, 16, 16])
-    ]).then(async ([r, background]) => {
-        return {
-            data: await r.json(),
-            bg: background
-        }
-    }).then(({ data: levelData, bg: background }) => {
-        const level = new Level();
+        loadJson(`./Levels/${lvl}.json`),
+        terrain,
+        terrain.loadDefinitions(
+            loadJson("./assets/jg_assets/Solid blocks/definition.json")
+        )
+    ]).then(([levelData, terrain]) => {
+        const level = new Level(terrain);
 
-        const terrainLayer = loadTilesFromJson(terrain, level.matrix, levelData.terrain);
-
-        level.comp.addLayers(
-            makeFixedLayer(background),
-            terrainLayer
-        );
-
+        setTilesInMatrix(terrain, level.matrix, levelData.terrain);
         return level;
     });
 }
