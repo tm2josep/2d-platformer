@@ -1,5 +1,6 @@
 import Trait from './Trait';
 import Entity from '../Entity';
+import Sprite from '../Sprite';
 
 export default class Jump extends Trait {
     private power = 300;
@@ -18,14 +19,13 @@ export default class Jump extends Trait {
         this.engageTime = 0;
     }
 
-    update(entity: Entity, delta: number) {
+    update(entity: Entity, delta: number, sprite: Sprite) {
         if (this.engageTime > 0) {
-            entity.setAnim('jump');
+            sprite.state = 'jump';
             entity.vel.y = -this.power;
             this.engageTime -= delta;
         } else if (entity.vel.y > 50) {
-            entity.setAnim('falling');
+            sprite.state = 'falling';
         }
     }
-
 }

@@ -1,5 +1,6 @@
 import Trait from './Trait';
 import Entity from '../Entity';
+import Sprite from '../Sprite';
 
 export default class Go extends Trait {
     public direction = 0;
@@ -10,7 +11,7 @@ export default class Go extends Trait {
         super('go');
     }
 
-    update(entity: Entity, delta: number) {
+    update(entity: Entity, delta: number, sprite: Sprite) {
         entity.vel.x = this.direction * this.speed * (delta * 100);
 
         if (entity.vel.y > 50 ) {
@@ -18,10 +19,16 @@ export default class Go extends Trait {
            return;
         }
 
+        if (this.direction === 1) {
+            sprite.dir = 'right'
+        } else if (this.direction === -1) {
+            sprite.dir = 'left'
+        }
+
         if (this.direction === 0) {
-            entity.setAnim('idle');
-        } else if (this.direction === 1) {
-            entity.setAnim('run');
+            sprite.state = 'idle';
+        } else if (this.direction !== 0) {
+            sprite.state = 'run';
         }
     }
 }

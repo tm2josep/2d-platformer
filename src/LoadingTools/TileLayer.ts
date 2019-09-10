@@ -8,6 +8,10 @@ export class TileLayer {
     private tiles: Matrix;
     private buffer: HTMLCanvasElement;
     private context: CanvasRenderingContext2D;
+    private x1 = 0;
+    private x2 = 0;
+    private y1 = 0;
+    private y2 = 0;
     constructor(level: Level, private tileSet: TileSet) {
         this.tiles = level.matrix;
         this.buffer = document.createElement('canvas');
@@ -17,17 +21,31 @@ export class TileLayer {
     }
 
     redraw(
-        x1: number,
-        x2: number,
-        y1: number,
-        y2: number
+        fromX: number,
+        toX: number,
+        fromY: number,
+        toY: number
     ) {
+        if (
+            fromX === this.x1 &&
+            toX === this.x2 &&
+            fromY === this.y1 &&
+            toY === this.y2
+        ) {
+            return;
+        }
+
+        this.x1 = fromX;
+        this.x2 = toX;
+        this.y1 = fromY;
+        this.y2 = toY;
+
         this.context.clearRect(0, 0, this.buffer.width, this.buffer.height);
-        for (let x = x1; x <= x2; x++) {
+        for (let x = this.x1; x <= this.x2; x++) {
             if (!this.tiles.checkCol(x)) continue;
-            for (let y = y1; y <= y2; y++) {
+            for (let y = this.y1; y <= this.y2; y++) {
                 if (!this.tiles.checkCell(x, y)) continue;
-                this.tileSet.draw(this.tiles.get(x, y).type, this.context, x - x1, y - y1);
+                this.tileSet.draw(this.tiles.get(x, y).type, this.context, x - this.x1, y - this.y1);
             }
         }
     }

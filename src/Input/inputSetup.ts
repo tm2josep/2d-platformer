@@ -3,24 +3,26 @@ import KeyboardState from './KeyboardState';
 import Entity from '../Entity';
 import Go from '../Traits/Go';
 import Camera from '../Camera/Camera';
+import Jump from '../Traits/Jump';
 export function setupKeyboard(player: Entity) {
     const keyboard = new KeyboardState();
     keyboard.attach(window);
     keyboard.addMapping(UP, (state: boolean) => {
+        let jump = <Jump>player.trait('jump');
         if (state) {
-            player.trait('jump').start();
+            jump.start();
         } else {
-            player.trait('jump').cancel();
+            jump.cancel();
         }
     });
 
     keyboard.addMapping(RIGHT, (state: boolean) => {
-        let trait: Go = player.trait('go');
+        let trait = <Go>player.trait('go');
         trait.direction = state ? 1 : 0;
     });
 
     keyboard.addMapping(LEFT, (state: boolean) => {
-        let trait: Go = player.trait('go');
+        let trait = <Go>player.trait('go');
         trait.direction = state ? -1 : 0;
     })
 }

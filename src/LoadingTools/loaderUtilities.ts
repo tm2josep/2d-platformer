@@ -1,9 +1,11 @@
 import { jsonTile } from '../types';
 import TileSet from './TileSet';
-import { WIDTH, HEIGHT, TILE_SIZE } from '../constants';
 import { Matrix } from '../MathTools';
 import Camera from '../Camera/Camera';
-import Level from '../Level';
+
+export function loadJson(url: string) {
+    return fetch(url).then(r => r.json());
+}
 
 export function makeBuffer(
     image: HTMLImageElement | HTMLCanvasElement,

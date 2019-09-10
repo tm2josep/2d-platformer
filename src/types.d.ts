@@ -10,14 +10,20 @@ export interface imageSubset<T> {
     3: T
 }
 
+export interface lenTwo<T> {
+    0: T,
+    1: T
+}
+
 export interface tileData {
     type: string,
     collides: boolean
 }
 
 export interface animation {
-    images: Array<HTMLImageElement | HTMLCanvasElement>,
-    loop: boolean
+    images: lenTwo<Array<HTMLImageElement | HTMLCanvasElement>>,
+    loop: boolean,
+    playbackModifier: number
 }
 
 export interface jsonTileDefinition {

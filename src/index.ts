@@ -24,18 +24,27 @@ const spriteSheet = new SpriteLoader('./assets/Sprites/plain/adventurer-v1.5-She
 
 Promise.all([
     loadLevel('1-1'),
-    spriteSheet.getFrames([
-        { x: 0, y: 7, w: 50, h: 37 },
-        { x: 50, y: 7, w: 50, h: 37 },
-        { x: 100, y: 7, w: 50, h: 37 },
-        { x: 150, y: 7, w: 50, h: 37 },
-    ])
-]).then(([level, idleFrames]) => {
+    spriteSheet.loadFromConfig("assets/Sprites/plain/adventurer-config.json")
+]).then(([level, animations]) => {
     const camera = new Camera()
+    let playerSprite = new Sprite('idle');
+    animations.forEach((
+        { name, images, loop, playbackModifier }
+    ) => {
+        playerSprite.defineAnimation(
+            name,
+            images,
+            loop,
+            playbackModifier
+        );
+    });
+
     let player = new Entity(
-        new Sprite('idle', idleFrames),
+        playerSprite,
         new Vec2(25, 30)
     );
+
+
 
     player.pos.set(50, 600);
     setupKeyboard(player);

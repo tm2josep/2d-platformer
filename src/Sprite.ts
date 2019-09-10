@@ -1,15 +1,14 @@
-import { animation } from './types';
+import { animation, lenTwo } from './types';
 export default class Sprite {
     private animations: Map<string, animation>;
     private frameTime: number;
-    private frame: number
+    private frame: number;
+    public dir: string;
 
     constructor(
         private _state: string,
-        images: Array<HTMLCanvasElement>
     ) {
         this.animations = new Map();
-        this.defineAnimation(_state, images); // idle always loops
         this.frame = 0;
         this.frameTime = 0;
     }
@@ -27,30 +26,49 @@ export default class Sprite {
         this._state = stateName;
     }
 
+    private get frameDirection() {
+        return this.dir === 'left' ? 1 : 0;
+    }
+
+    private get currentAnim() {
+        return this.animations.get(this._state);
+    }
+
+    private get currentFrames() {
+        return this.animations.get(this._state).images[this.frameDirection]
+    }
+
     update(delta: number) {
         this.frameTime += delta;
-        const currentAnim = this.animations.get(this._state);
-
-        if (!currentAnim.loop) {
-            return;
-        }
-
         while (this.frameTime > delta) {
             this.frameTime -= delta;
-            this.frame += delta * 5;
-            if (this.frame >= currentAnim.images.length) {
-                this.frame = 0;
+            this.frame += delta * this.currentAnim.playbackModifier;
+            if (this.frame >= this.currentFrames.length) {
+                this.frame = this.currentAnim.loop ? 0 : this.currentFrames.length - 1;
             }
         }
     }
 
-    defineAnimation(name: string, images: Array<HTMLCanvasElement>, loop = true) {
-        this.animations.set(name, { images, loop });
+    adjustPlayback(name: string, value: number) {
+        this.animations.get(name).playbackModifier = value;
+    }
+
+    defineAnimation(
+        name: string,
+        images: lenTwo<HTMLCanvasElement[]>,
+        loop = true,
+        playbackModifier = 10
+    ) {
+        this.animations.set(name, { images, loop, playbackModifier });
     }
 
     draw(context: CanvasRenderingContext2D, x: number, y: number) {
         context.drawImage(
-            this.animations.get(this._state).images[Math.floor(this.frame)],
+            this.animations.get(this._state).images[
+            this.dir === 'left' ? 1 : 0
+            ][
+            Math.floor(this.frame)
+            ],
             x, y
         );
     }
