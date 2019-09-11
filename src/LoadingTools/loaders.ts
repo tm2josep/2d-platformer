@@ -1,8 +1,7 @@
 import Level from '../Level';
 import { TILE_SIZE } from '../constants';
-import { makeFixedLayer, setTilesInMatrix, loadJson } from './loaderUtilities';
+import { setTilesInMatrix, loadJson } from './loaderUtilities';
 import TileSet from './TileSet';
-import { TileLayer } from './TileLayer';
 
 export function loadImage(url: string): Promise<HTMLCanvasElement> {
     return new Promise((resolve, reject) => {

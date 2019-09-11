@@ -18,15 +18,17 @@ export function setupKeyboard(player: Entity) {
 
     keyboard.addMapping(RIGHT, (state: boolean) => {
         let trait = <Go>player.trait('go');
-        trait.direction = state ? 1 : 0;
+        trait.direction += state ? 1 : -1;
     });
 
     keyboard.addMapping(LEFT, (state: boolean) => {
         let trait = <Go>player.trait('go');
-        trait.direction = state ? -1 : 0;
+        trait.direction += state ? -1 : 1;
     })
 }
 
+
+// dev-only:
 export function setupDebugTool(canvas: HTMLCanvasElement, entity: Entity, camera: Camera) {
     let lastEvent: MouseEvent;
     ['mousedown', 'mousemove'].forEach((eventName) => {

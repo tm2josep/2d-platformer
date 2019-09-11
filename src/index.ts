@@ -44,8 +44,6 @@ Promise.all([
         new Vec2(25, 30)
     );
 
-
-
     player.pos.set(50, 600);
     setupKeyboard(player);
     setupDebugTool(canvas, player, camera);

@@ -27,15 +27,10 @@ export class SpriteLoader {
                     }
 
                     context.drawImage(
-                        this.spriteSheet,
-                        x,
-                        y,
-                        w,
-                        h,
+                        this.spriteSheet, x, y, w, h,
                         this.offsetX * (flip ? -1 : 1),
                         this.offsetY * (flip ? -1 : 1),
-                        w,
-                        h,
+                        w, h,
                     );
                     return buffer;
                 }

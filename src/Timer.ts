@@ -9,6 +9,12 @@ export default class Timer {
 
     updateHandler(time = 0) {
         this.accumulatedTime += (time - this.lastTime) / 1000;
+
+        // dev-only:
+        if (this.accumulatedTime > 1) {
+            this.accumulatedTime = 1;
+        }
+
         while (this.accumulatedTime > this.deltaTime) {
             this.update(this.deltaTime);
             this.accumulatedTime -= this.deltaTime;
