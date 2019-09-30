@@ -18,5 +18,15 @@
             16,
             16
         ]
+    },
+    "crate": {
+        "url": "assets/Object/Crate.png",
+        "collides": true,
+        "subset": [
+            0,
+            0,
+            77,
+            77
+        ]
     }
 }

@@ -23,7 +23,7 @@ const context = canvas.getContext('2d');
 const spriteSheet = new SpriteLoader('./assets/Sprites/plain/adventurer-v1.5-Sheet.png');
 
 Promise.all([
-    loadLevel('1-1'),
+    loadLevel('1-2'),
     spriteSheet.loadFromConfig("assets/Sprites/plain/adventurer-config.json")
 ]).then(([level, animations]) => {
     const camera = new Camera()
@@ -69,7 +69,7 @@ Promise.all([
     const timer = new Timer(1 / 60, (delta: number) => {
         player.vel.y += GRAVITY * delta;
         level.update(delta);
-        // camera.follow(player);
+        camera.follow(player);
         level.comp.draw(context, camera);
     });
 

@@ -5,7 +5,7 @@ import Camera from './Camera/Camera';
 import { lenTwo } from './types';
 
 export default class Entity {
-    public pos = new Vec2(0, 0);
+    public pos = new Vec2(5, -5);
     public vel = new Vec2(0, 0);
     private traits: Map<string, Trait> = new Map();
 

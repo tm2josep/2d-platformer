@@ -28,7 +28,7 @@ export function loadLevel(lvl: string): Promise<Level> {
         loadJson(`./Levels/${lvl}.json`),
         terrain,
         terrain.loadDefinitions(
-            loadJson("./assets/jg_assets/Solid blocks/definition.json")
+            loadJson("./assets/definition.json")
         )
     ]).then(([levelData, terrain]) => {
         const level = new Level(terrain);
